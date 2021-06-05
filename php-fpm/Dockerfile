@@ -67,7 +67,8 @@ RUN pecl install -o -f redis \
     && rm -rf /tmp/pear \
     && docker-php-ext-enable redis
 
-RUN docker-php-ext-install mysqli
+RUN docker-php-ext-install mysqli; \
+    docker-php-ext-install sockets
 
 RUN apt-get install -yqq zlib1g-dev libicu-dev g++ && \
     docker-php-ext-configure intl && \
@@ -83,8 +84,14 @@ RUN apt-get install -y libmagickwand-dev libmagickcore-dev && \
 RUN docker-php-ext-enable imagick && \
     php -m | grep -q 'imagick'
 
-WORKDIR /var/www
+RUN apt-get install -yqq supervisor
+
+WORKDIR /var/www/html
 
 CMD ["php-fpm"]
 
 EXPOSE 9000
+#
+#COPY ./supervisor/supervisord.conf "/etc/supervisor/supervisord.conf"
+
+#ENTRYPOINT ["/usr/bin/supervisord", "-c","/etc/supervisor/supervisord.conf"]
