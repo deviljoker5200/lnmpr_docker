@@ -4,9 +4,10 @@ services:
     image: nginx
     container_name: nginx
     ports:
-      - "82:80"
+      - "80:80"
     volumes:
       - ./nginx/conf:/etc/nginx/conf.d
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./www:/var/www
     depends_on:
       - php
